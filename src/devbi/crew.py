@@ -5,7 +5,7 @@ from devbi.tools.custom_tool import LocalLLMTool
 # Configuração das variáveis de ambiente
 os.environ["OPENAI_API_BASE"] = 'http://localhost:11434/v1'
 os.environ["OPENAI_MODEL_NAME"] = 'openhermes'
-os.environ["OPENAI_API_KEY"] = ''
+os.environ["OPENAI_API_KEY"] = "NA"
 
 # Configuração da ferramenta
 local_llm_tool = LocalLLMTool()
