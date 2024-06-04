@@ -1,4 +1,7 @@
 from devbi.crew import kickoff
 
-if __name__ == "__main__":
+def main():
     kickoff()
+
+if __name__ == "__main__":
+    main()

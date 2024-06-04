@@ -1,13 +1,11 @@
 import os
 from crewai import Agent, Task, Crew
+from devbi.tools.custom_tool import LocalLLMTool
 
 # Configuração das variáveis de ambiente
 os.environ["OPENAI_API_BASE"] = 'http://localhost:11434/v1'
-os.environ["OPENAI_MODEL_NAME"] = 'openhermes'  # Ajuste conforme o modelo disponível
+os.environ["OPENAI_MODEL_NAME"] = 'openhermes'
 os.environ["OPENAI_API_KEY"] = ''
-
-# Importando a ferramenta personalizada
-from devbi.tools.custom_tool import LocalLLMTool
 
 # Configuração da ferramenta
 local_llm_tool = LocalLLMTool()
@@ -34,10 +32,6 @@ crew = Crew(
     verbose = 2
 )
 
-# Função para iniciar a equipe
 def kickoff():
     result = crew.kickoff()
     print(result)
-
-if __name__ == "__main__":
-    kickoff()
