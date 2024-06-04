@@ -1,55 +1,59 @@
-from crewai import Agent, Crew, Process, Task
-from crewai.project import CrewBase, agent, crew, task
+import os
+from crewai import Agent, Task, Crew, Process
+from src.devbi.tools.custom_tool import LocalLLMTool
 
-# Uncomment the following line to use an example of a custom tool
-# from devbi.tools.custom_tool import MyCustomTool
+# Ferramentas
+local_llm_tool = LocalLLMTool()
 
-# Check our tools documentations for more information on how to use them
-# from crewai_tools import SerperDevTool
+# Configurar agentes e tarefas aqui se necessário
+# (Ou eles serão carregados dos arquivos YAML)
 
-@CrewBase
-class DevbiCrew():
-	"""Devbi crew"""
-	agents_config = 'config/agents.yaml'
-	tasks_config = 'config/tasks.yaml'
+# Função para iniciar a equipe
+def kickoff():
+    researcher = Agent(
+        role='Senior Researcher',
+        goal='Uncover groundbreaking technologies in {topic}',
+        verbose=True,
+        memory=True,
+        backstory="Driven by curiosity, you're at the forefront of innovation, eager to explore and share knowledge that could change the world.",
+        tools=[local_llm_tool],
+        allow_delegation=True
+    )
 
-	@agent
-	def researcher(self) -> Agent:
-		return Agent(
-			config=self.agents_config['researcher'],
-			# tools=[MyCustomTool()], # Example of custom tool, loaded on the beginning of file
-			verbose=True
-		)
+    writer = Agent(
+        role='Writer',
+        goal='Narrate compelling tech stories about {topic}',
+        verbose=True,
+        memory=True,
+        backstory="With a flair for simplifying complex topics, you craft engaging narratives that captivate and educate, bringing new discoveries to light in an accessible manner.",
+        tools=[local_llm_tool],
+        allow_delegation=False
+    )
 
-	@agent
-	def reporting_analyst(self) -> Agent:
-		return Agent(
-			config=self.agents_config['reporting_analyst'],
-			verbose=True
-		)
+    research_task = Task(
+        description="Identify the next big trend in {topic}. Focus on identifying pros and cons and the overall narrative. Your final report should clearly articulate the key points, its market opportunities, and potential risks.",
+        expected_output='A comprehensive 3 paragraphs long report on the latest AI trends.',
+        tools=[local_llm_tool],
+        agent=researcher,
+    )
 
-	@task
-	def research_task(self) -> Task:
-		return Task(
-			config=self.tasks_config['research_task'],
-			agent=self.researcher()
-		)
+    write_task = Task(
+        description="Compose an insightful article on {topic}. Focus on the latest trends and how it's impacting the industry. This article should be easy to understand, engaging, and positive.",
+        expected_output='A 4 paragraph article on {topic} advancements formatted as markdown.',
+        tools=[local_llm_tool],
+        agent=writer,
+        async_execution=False,
+        output_file='new-blog-post.md'
+    )
 
-	@task
-	def reporting_task(self) -> Task:
-		return Task(
-			config=self.tasks_config['reporting_task'],
-			agent=self.reporting_analyst(),
-			output_file='report.md'
-		)
+    crew = Crew(
+        agents=[researcher, writer],
+        tasks=[research_task, write_task],
+        process=Process.sequential
+    )
 
-	@crew
-	def crew(self) -> Crew:
-		"""Creates the Devbi crew"""
-		return Crew(
-			agents=self.agents, # Automatically created by the @agent decorator
-			tasks=self.tasks, # Automatically created by the @task decorator
-			process=Process.sequential,
-			verbose=2,
-			# process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
-		)
+    result = crew.kickoff(inputs={'topic': 'AI in healthcare'})
+    print(result)
+
+if __name__ == "__main__":
+    kickoff()
