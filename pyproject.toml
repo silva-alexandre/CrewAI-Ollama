@@ -9,7 +9,7 @@ python = ">=3.10,<=3.13"
 crewai = {extras = ["tools"], version = "^0.30.11"}
 
 [tool.poetry.scripts]
-devbi = "devbi.main:run"
+devbi = "src.devbi.crew:kickoff"
 
 [build-system]
 requires = ["poetry-core"]
