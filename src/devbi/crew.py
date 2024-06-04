@@ -1,8 +1,6 @@
 import os
 from crewai import Agent, Task, Crew
-
-# Importando a ferramenta personalizada
-from src.devbi.tools.custom_tool import LocalLLMTool
+from devbi.tools.custom_tool import LocalLLMTool
 
 # Configuração da ferramenta
 local_llm_tool = LocalLLMTool()

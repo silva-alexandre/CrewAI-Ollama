@@ -1,4 +1,4 @@
-from src.devbi.crew import kickoff
+from devbi.crew import kickoff
 
 if __name__ == "__main__":
     kickoff()
