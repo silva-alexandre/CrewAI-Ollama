@@ -1,20 +1,10 @@
 agents:
-  - name: "Senior Researcher"
-    role: "Senior Researcher"
-    goal: "Uncover groundbreaking technologies in {topic}"
+  - name: "Math Professor"
+    role: "Math Professor"
+    goal: "Provide the solution to the students that are asking mathematical questions and give them the answer."
     verbose: true
     memory: true
-    backstory: "Driven by curiosity, you're at the forefront of innovation, eager to explore and share knowledge that could change the world."
-    tools:
-      - "local_llm_tool"
-    allow_delegation: true
-
-  - name: "Writer"
-    role: "Writer"
-    goal: "Narrate compelling tech stories about {topic}"
-    verbose: true
-    memory: true
-    backstory: "With a flair for simplifying complex topics, you craft engaging narratives that captivate and educate, bringing new discoveries to light in an accessible manner."
+    backstory: "You are an excellent math professor that likes to solve math questions in a way that everyone can understand your solution."
     tools:
       - "local_llm_tool"
     allow_delegation: false

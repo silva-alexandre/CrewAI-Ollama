@@ -1,58 +1,37 @@
 import os
-from crewai import Agent, Task, Crew, Process
+from crewai import Agent, Task, Crew
+
+# Importando a ferramenta personalizada
 from src.devbi.tools.custom_tool import LocalLLMTool
 
-# Ferramentas
+# Configuração da ferramenta
 local_llm_tool = LocalLLMTool()
 
-# Configurar agentes e tarefas aqui se necessário
-# (Ou eles serão carregados dos arquivos YAML)
+# Definição do Agente e Tarefas
+general_agent = Agent(
+    role = "Math Professor",
+    goal = """Provide the solution to the students that are asking mathematical questions and give them the answer.""",
+    backstory = """You are an excellent math professor that likes to solve math questions in a way that everyone can understand your solution""",
+    allow_delegation = False,
+    verbose = True,
+    tools = [local_llm_tool]
+)
+
+task = Task(
+    description = """What is 3 + 5?""",
+    agent = general_agent,
+    expected_output = "A numerical answer."
+)
+
+crew = Crew(
+    agents = [general_agent],
+    tasks = [task],
+    verbose = 2
+)
 
 # Função para iniciar a equipe
 def kickoff():
-    researcher = Agent(
-        role='Senior Researcher',
-        goal='Uncover groundbreaking technologies in {topic}',
-        verbose=True,
-        memory=True,
-        backstory="Driven by curiosity, you're at the forefront of innovation, eager to explore and share knowledge that could change the world.",
-        tools=[local_llm_tool],
-        allow_delegation=True
-    )
-
-    writer = Agent(
-        role='Writer',
-        goal='Narrate compelling tech stories about {topic}',
-        verbose=True,
-        memory=True,
-        backstory="With a flair for simplifying complex topics, you craft engaging narratives that captivate and educate, bringing new discoveries to light in an accessible manner.",
-        tools=[local_llm_tool],
-        allow_delegation=False
-    )
-
-    research_task = Task(
-        description="Identify the next big trend in {topic}. Focus on identifying pros and cons and the overall narrative. Your final report should clearly articulate the key points, its market opportunities, and potential risks.",
-        expected_output='A comprehensive 3 paragraphs long report on the latest AI trends.',
-        tools=[local_llm_tool],
-        agent=researcher,
-    )
-
-    write_task = Task(
-        description="Compose an insightful article on {topic}. Focus on the latest trends and how it's impacting the industry. This article should be easy to understand, engaging, and positive.",
-        expected_output='A 4 paragraph article on {topic} advancements formatted as markdown.',
-        tools=[local_llm_tool],
-        agent=writer,
-        async_execution=False,
-        output_file='new-blog-post.md'
-    )
-
-    crew = Crew(
-        agents=[researcher, writer],
-        tasks=[research_task, write_task],
-        process=Process.sequential
-    )
-
-    result = crew.kickoff(inputs={'topic': 'AI in healthcare'})
+    result = crew.kickoff()
     print(result)
 
 if __name__ == "__main__":
