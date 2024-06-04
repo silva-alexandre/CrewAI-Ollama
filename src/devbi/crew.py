@@ -1,5 +1,12 @@
 import os
 from crewai import Agent, Task, Crew
+
+# Configuração das variáveis de ambiente
+os.environ["OPENAI_API_BASE"] = 'http://localhost:11434/v1'
+os.environ["OPENAI_MODEL_NAME"] = 'openhermes'  # Ajuste conforme o modelo disponível
+os.environ["OPENAI_API_KEY"] = ''
+
+# Importando a ferramenta personalizada
 from devbi.tools.custom_tool import LocalLLMTool
 
 # Configuração da ferramenta
