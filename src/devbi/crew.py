@@ -1,35 +1,39 @@
 import os
 from crewai import Agent, Task, Crew
-from devbi.tools.custom_tool import LocalLLMTool
+from langchain_openai import ChatOpenAI
 
 # Configuração das variáveis de ambiente
 os.environ["OPENAI_API_BASE"] = 'http://localhost:11434/v1'
 os.environ["OPENAI_MODEL_NAME"] = 'openhermes'
 os.environ["OPENAI_API_KEY"] = "NA"
 
-# Configuração da ferramenta
-local_llm_tool = LocalLLMTool()
+# Configuração do LLM
+llm = ChatOpenAI(
+    model="crewai-llama2",
+    base_url="http://localhost:11434/v1"
+)
 
 # Definição do Agente e Tarefas
 general_agent = Agent(
-    role = "Math Professor",
-    goal = """Provide the solution to the students that are asking mathematical questions and give them the answer.""",
-    backstory = """You are an excellent math professor that likes to solve math questions in a way that everyone can understand your solution""",
-    allow_delegation = False,
-    verbose = True,
-    tools = [local_llm_tool]
+    role="Science Educator",
+    goal="Educate people on the importance and benefits of water.",
+    backstory="You are a passionate science educator who loves to share knowledge about the vital role of water in human life.",
+    allow_delegation=False,
+    verbose=True,
+    llm=llm
 )
 
 task = Task(
-    description = """What is 3 + 5?""",
-    agent = general_agent,
-    expected_output = "A numerical answer."
+    description="Write a detailed report on the benefits of water for humanity, focusing on health, environment, and daily life. Format the report in Markdown.",
+    agent=general_agent,
+    expected_output="A Markdown file with a detailed report on the benefits of water.",
+    output_file='benefits_of_water.md'
 )
 
 crew = Crew(
-    agents = [general_agent],
-    tasks = [task],
-    verbose = 2
+    agents=[general_agent],
+    tasks=[task],
+    verbose=2
 )
 
 def kickoff():

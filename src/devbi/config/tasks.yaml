@@ -1,6 +1,7 @@
 tasks:
-  - description: "What is 3 + 5?"
-    expected_output: "A numerical answer."
+  - description: "Write a detailed report on the benefits of water for humanity, focusing on health, environment, and daily life. Format the report in Markdown."
+    expected_output: "A Markdown file with a detailed report on the benefits of water."
     tools:
       - "local_llm_tool"
-    agent: "Math Professor"
+    agent: "Science Educator"
+    output_file: "benefits_of_water.md"
