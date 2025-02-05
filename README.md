@@ -1,7 +1,9 @@
 # CrewAI-Ollama
 
 
-Teste de Salvar
+Projeto desenvolvido para utilizar Ollama de forma local em conjunto com o Framework CrewAI, com objetivo de gerar texto com base no tema sugerido pelo usuário.
+
+O arquivo "benefits_of_water.md" é o resultado da execução da Crew.
 
 Welcome to the CrewAI-Ollama project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
 
